@@ -1,0 +1,86 @@
+{\rtf1\ansi\ansicpg1251\cocoartf1671\cocoasubrtf200
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww28600\viewh15620\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 1) 	SELECT DISTINCT p.maker\
+ FROM Product p  \
+ JOIN PC \
+ ON p.model = PC.model \
+ WHERE p.maker\
+ NOT IN (\
+		SELECT ip.maker  \
+        FROM Laptop il  \
+        JOIN  Product ip \
+        ON il.model = ip.model\
+);\
+\
+2)	 SELECT DISTINCT p.maker\
+ FROM Product p  \
+ JOIN PC \
+ ON p.model = PC.model \
+ WHERE p.maker !=\
+  ALL  (\
+		SELECT ip.maker  \
+        FROM Laptop il  \
+        JOIN  Product ip \
+        ON il.model = ip.model\
+);\
+\
+3) 	SELECT DISTINCT  maker FROM Labor_SQL.Product  WHERE type = 'PC' AND NOT model = ANY (SELECT model  FROM PC)  ; // \uc0\u1074 \u1080 \u1074 \u1086 \u1076 \u1080 \u1090 \u1100  \u1072 \u1083 \u1077  \u1093 \u1079  \u1095 \u1080  \u1087 \u1088 \u1072 \u1074 \u1080 \u1083 \u1100 \u1085 \u1086 \
+\
+4) 	SELECT DISTINCT p.maker\
+ FROM Product p  \
+ JOIN PC \
+ ON p.model = PC.model \
+ WHERE p.maker\
+  IN (\
+		SELECT ip.maker  \
+        FROM Laptop il  \
+        JOIN  Product ip \
+        ON il.model = ip.model\
+);\
+\
+5)	SELECT distinct maker FROM product pr WHERE \
+  NOT pr.model != ALL(SELECT pc.model FROM pc)\
+  AND\
+  NOT pr.maker !=ALL(SELECT distinct maker FROM laptop JOIN product as pr2 \
+  ON laptop.model = pr2.model WHERE pr2.maker = pr.maker);	\
+\
+6)	SELECT DISTINCT p.maker\
+ FROM Product p  \
+ JOIN PC \
+ ON p.model = PC.model \
+ WHERE p.maker =\
+  any  (\
+		SELECT ip.maker  \
+        FROM Laptop il  \
+        JOIN  Product ip \
+        ON il.model = ip.model\
+);\
+\
+6) 2).  SELECT DISTINCT maker\
+	FROM Product\
+	WHERE (maker=ANY(SELECT maker FROM Product WHERE type='PC'))\
+	AND type='Laptop';\
+______________________________________________________________________________________________\
+\
+\pard\pardeftab720\sl300\partightenfactor0
+\cf0 SELECT distinct maker \
+FROM Product \
+Where Type='PC' \
+AND maker \
+not in (	\
+		SELECT maker \
+        FROM Product \
+        WHERE NOT EXISTS \
+        (Select*FROM \
+        PC WHERE \
+        PC.model=Product.model)\
+        AND type= 'PC'); // \uc0\u1087 \u1077 \u1088 \u1077 \u1076 \u1080 \u1074 \u1080 \u1090 \u1080 \u1089 \u1103 \
+\
+\
+2) \
+}
